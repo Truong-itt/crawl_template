@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 from tqdm import tqdm
+import time
+
 
 def get_url_every_page(link):
     temp = []
@@ -43,6 +45,7 @@ def get_content(urls):
     content_total = []
     for i in tqdm(urls):
         try:
+            time.sleep(1)
             content = get_url(i)
             h1_link = content.find('h1')
             h2_link = content.find('h2')
@@ -68,9 +71,18 @@ def get_content(urls):
 
 def data_to_csv(data):
     df = pd.DataFrame(data)
-    df.to_csv('data.csv', index=False, encoding='utf-8-sig', sep=';', header=True)
+    df.to_csv(
+        'data.csv',
+        index=False,
+        encoding='utf-8-sig',
+        sep=',', 
+        quotechar='"', 
+        escapechar='\\' 
+    )
     print("Dữ liệu đã được ghi vào 'data.csv'")
     
 if __name__ == '__main__':
     data_to_csv(get_content(full_link()))
-    
+
+
+   
